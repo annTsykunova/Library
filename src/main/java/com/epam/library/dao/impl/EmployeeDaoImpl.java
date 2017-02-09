@@ -24,6 +24,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
             "GROUP BY NAME, DATE_OF_BIRTH HAVING COUNT(BOOK_ID) <= 2 ORDER BY NUMBER_OF_BOOKS DESC, DATE_OF_BIRTH";
     private static final String SQL_UPDATE_BY_TITLE = "UPDATE BOOK SET BOOK.TITLE = ? WHERE BOOK.TITLE = ?";
 
+    private static final String NAME = "NAME";
+    private static final String NUMBER_OF_BOOKS = "NUMBER_OF_BOOKS";
+    private static final String DATE_OF_BIRTH = "DATE_OF_BIRTH";
+
     private static EmployeeDao employeeDao;
 
     private EmployeeDaoImpl() {
@@ -41,14 +45,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public Map<String, Integer> readMoreThanOneBook() throws DAOException {
         Map<String, Integer> result;
-        try(Connection connection = DataSource.getInstance().getConnection();
-            PreparedStatement statement = connection.prepareStatement(SQL_READ_MORE_THAN_ONE);
-        ){
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL_READ_MORE_THAN_ONE);
+        ) {
             ResultSet set = statement.executeQuery();
             result = new HashMap<>();
-            while (set.next()){
-                String name = set.getString(1);
-                int numberOfBooks = set.getInt(2);
+            while (set.next()) {
+                String name = set.getString(NAME);
+                int numberOfBooks = set.getInt(NUMBER_OF_BOOKS);
                 result.put(name, numberOfBooks);
             }
         } catch (SQLException e) {
@@ -61,17 +65,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public Map<String, Integer> readLessThanOrEqualTwoBook() throws DAOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         Map<String, Integer> result;
-        try(Connection connection = DataSource.getInstance().getConnection();
-            PreparedStatement statement = connection.prepareStatement(SQL_READ_LESS_THAN_TWO);
-        ){
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL_READ_LESS_THAN_TWO);
+        ) {
             ResultSet set = statement.executeQuery();
             result = new HashMap<>();
-            while (set.next()){
-                String resultInfo = set.getString(1) + dateFormat.format(set.getDate(2));
-                Integer numberOfBooks = set.getInt(3);
+            while (set.next()) {
+                String resultInfo = set.getString(NAME) + dateFormat.format(set.getDate(NUMBER_OF_BOOKS));
+                Integer numberOfBooks = set.getInt(DATE_OF_BIRTH);
                 result.put(resultInfo, numberOfBooks);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DAOException(e);
         }
         return result;
@@ -80,10 +84,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public boolean updateBookByTitle(String newTitle, String oldTitle) throws DAOException {
         boolean flag;
-        try(
+        try (
                 Connection connection = DataSource.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_BY_TITLE);
-        ){
+        ) {
             statement.setString(1, newTitle);
             statement.setString(2, oldTitle);
             statement.executeUpdate();

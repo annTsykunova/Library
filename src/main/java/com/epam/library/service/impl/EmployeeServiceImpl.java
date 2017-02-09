@@ -1,6 +1,7 @@
 package com.epam.library.service.impl;
 
 
+import com.epam.library.dao.EmployeeDao;
 import com.epam.library.dao.impl.EmployeeDaoImpl;
 
 import com.epam.library.entity.Employee;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class EmployeeServiceImpl implements EmployeeService{
     private static EmployeeService employeeService;
+    private EmployeeDao employeeDao = EmployeeDaoImpl.getInstance();
 
     private EmployeeServiceImpl() {
     }
@@ -32,7 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     public List<String> readMoreThanOneBook() throws ServiceException {
         List<String> reportList;
         try {
-            reportList = EmployeeDaoImpl.getInstance().readMoreThanOneBook().entrySet()
+            reportList = employeeDao.readMoreThanOneBook().entrySet()
                     .stream().map(entry -> entry.getKey() + " : " + entry.getValue())
                     .collect(Collectors.toList());
         } catch (DAOException e) {
@@ -45,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     public List<String> readLessThanOrEqualTwoBook() throws ServiceException {
         List<String> reportList;
         try {
-            reportList =  EmployeeDaoImpl.getInstance().readLessThanOrEqualTwoBook().entrySet()
+            reportList =  employeeDao.readLessThanOrEqualTwoBook().entrySet()
                     .stream().map(entry -> entry.getKey() + " : " + entry.getValue())
                     .collect(Collectors.toList());
         } catch (DAOException e) {
@@ -58,11 +60,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     public boolean updateBookByTitle(String newTitle, String oldTitle) throws ServiceException {
         boolean flag;
         try {
-            flag = EmployeeDaoImpl.getInstance().updateBookByTitle(newTitle, oldTitle);
+            flag = employeeDao.updateBookByTitle(newTitle, oldTitle);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
         return flag;
     }
-    
+
 }
