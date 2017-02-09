@@ -3,7 +3,7 @@ package com.epam.library.entity;
 
 import java.sql.Date;
 
-public abstract class Employee {
+public class Employee {
     private Integer id;
     private String name;
     private Date dateOfBirth;
