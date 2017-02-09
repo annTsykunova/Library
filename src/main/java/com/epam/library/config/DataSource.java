@@ -9,18 +9,25 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DataSource {
+    public static final String DRIVER = "driver";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String URL = "url";
+    public static final Integer MIN_IDLE = 5;
+    public static final Integer MAX_IDLE = 20;
+    public static final Integer MAX_PREPARED_STATEMENTS = 180;
     private static DataSource datasource;
     private BasicDataSource ds;
 
     private DataSource() throws IOException, SQLException, PropertyVetoException {
         ds = new BasicDataSource();
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUsername("root");
-        ds.setPassword("root");
-        ds.setUrl("jdbc:mysql://localhost/test");
-        ds.setMinIdle(5);
-        ds.setMaxIdle(20);
-        ds.setMaxOpenPreparedStatements(180);
+        ds.setDriverClassName(PropertyReader.getProperty(DRIVER));
+        ds.setUsername(PropertyReader.getProperty(USERNAME));
+        ds.setPassword(PropertyReader.getProperty(PASSWORD));
+        ds.setUrl(PropertyReader.getProperty(URL));
+        ds.setMinIdle(MIN_IDLE);
+        ds.setMaxIdle(MAX_IDLE);
+        ds.setMaxOpenPreparedStatements(MAX_PREPARED_STATEMENTS);
     }
 
     public static DataSource getInstance() {

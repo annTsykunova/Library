@@ -14,6 +14,11 @@ public class BookDaoImpl implements BookDao {
     private static final String SQL_FIND_BOOK_BY_ID = "select id, title, brief, publish_year, author from book where id = ?";
     private static final String SQL_DELETE_BOOK_BY_ID = "delete from book where id = ?";
     private static final String SQL_UPDATE_BOOK_BY_ID = "update book set title = ?, brief = ?, year = ?, author = ? where id = ?";
+    private static final String BOOK_ID = "id";
+    private static final String BRIEF = "brief";
+    private static final String TITLE = "title";
+    private static final String AUTHOR = "author";
+    private static final String PUBLISH_YEAR = "publish_year";
 
     private static BookDao bookDao;
 
@@ -39,11 +44,11 @@ public class BookDaoImpl implements BookDao {
             statement.setInt(1, key);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                book.setId(resultSet.getInt("id"));
-                book.setBrief(resultSet.getString("brief"));
-                book.setTitle(resultSet.getString("title"));
-                book.setAuthor(resultSet.getString("author"));
-                book.setYear(resultSet.getInt("publish_year"));
+                book.setId(resultSet.getInt(BOOK_ID));
+                book.setBrief(resultSet.getString(BRIEF));
+                book.setTitle(resultSet.getString(TITLE));
+                book.setAuthor(resultSet.getString(AUTHOR));
+                book.setYear(resultSet.getInt(PUBLISH_YEAR));
             }
         } catch (SQLException e) {
             throw new DAOException(e);

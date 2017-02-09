@@ -29,41 +29,40 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<String> readMoreThanOneBook() {
-        return EmployeeDaoImpl.getInstance().readMoreThanOneBook().entrySet()
-                .stream().map(entry -> entry.getKey() + " : " + entry.getValue())
-                .collect(Collectors.toList());
+    public List<String> readMoreThanOneBook() throws ServiceException {
+        List<String> reportList;
+        try {
+            reportList = EmployeeDaoImpl.getInstance().readMoreThanOneBook().entrySet()
+                    .stream().map(entry -> entry.getKey() + " : " + entry.getValue())
+                    .collect(Collectors.toList());
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return reportList;
     }
 
     @Override
-    public List<String> readLessThanOrEqualTwoBook() {
-        return EmployeeDaoImpl.getInstance().readLessThanOrEqualTwoBook().entrySet()
-                .stream().map(entry -> entry.getKey() + " : " + entry.getValue())
-                .collect(Collectors.toList());
+    public List<String> readLessThanOrEqualTwoBook() throws ServiceException {
+        List<String> reportList;
+        try {
+            reportList =  EmployeeDaoImpl.getInstance().readLessThanOrEqualTwoBook().entrySet()
+                    .stream().map(entry -> entry.getKey() + " : " + entry.getValue())
+                    .collect(Collectors.toList());
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return reportList;
     }
 
     @Override
-    public boolean updateBookByTitle(String newTitle, String oldTitle) {
-        return EmployeeDaoImpl.getInstance().updateBookByTitle(newTitle, oldTitle);
+    public boolean updateBookByTitle(String newTitle, String oldTitle) throws ServiceException {
+        boolean flag;
+        try {
+            flag = EmployeeDaoImpl.getInstance().updateBookByTitle(newTitle, oldTitle);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return flag;
     }
-
-    @Override
-    public Employee getById(Integer key) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Integer add(Employee persistenceObject) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean delete(Integer key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean update(Employee employee) {
-        throw new UnsupportedOperationException();
-    }
+    
 }

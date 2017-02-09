@@ -3,10 +3,13 @@ package com.epam.library.dao.impl;
 
 import com.epam.library.config.DataSource;
 import com.epam.library.dao.EmployeeDao;
+import com.epam.library.exception.DAOException;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,8 +39,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public Map<String, Integer> readMoreThanOneBook() {
-        Map<String, Integer> result = Collections.emptyMap();
+    public Map<String, Integer> readMoreThanOneBook() throws DAOException {
+        Map<String, Integer> result;
         try(Connection connection = DataSource.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(SQL_READ_MORE_THAN_ONE);
         ){
@@ -48,16 +51,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 int numberOfBooks = set.getInt(2);
                 result.put(name, numberOfBooks);
             }
-        }catch (Exception e){
-
+        } catch (SQLException e) {
+            throw new DAOException(e);
         }
         return result;
     }
 
     @Override
-    public Map<String, Integer> readLessThanOrEqualTwoBook() {
+    public Map<String, Integer> readLessThanOrEqualTwoBook() throws DAOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        Map<String, Integer> result = Collections.emptyMap();
+        Map<String, Integer> result;
         try(Connection connection = DataSource.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(SQL_READ_LESS_THAN_TWO);
         ){
@@ -68,15 +71,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 Integer numberOfBooks = set.getInt(3);
                 result.put(resultInfo, numberOfBooks);
             }
-        }catch (Exception e){
-
+        }catch (SQLException e) {
+            throw new DAOException(e);
         }
         return result;
     }
 
     @Override
-    public boolean updateBookByTitle(String newTitle, String oldTitle) {
-        boolean flag = false;
+    public boolean updateBookByTitle(String newTitle, String oldTitle) throws DAOException {
+        boolean flag;
         try(
                 Connection connection = DataSource.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_BY_TITLE);
@@ -85,9 +88,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
             statement.setString(2, oldTitle);
             statement.executeUpdate();
             flag = true;
-        }catch (Exception e){
-
+        } catch (SQLException e) {
+            throw new DAOException(e);
         }
         return flag;
     }
+
 }

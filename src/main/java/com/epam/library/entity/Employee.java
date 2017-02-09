@@ -50,4 +50,37 @@ public class Employee {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employee employee = (Employee) o;
+
+        if (!id.equals(employee.id)) return false;
+        if (!name.equals(employee.name)) return false;
+        if (!dateOfBirth.equals(employee.dateOfBirth)) return false;
+        return email.equals(employee.email);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + dateOfBirth.hashCode();
+        result = 31 * result + email.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
